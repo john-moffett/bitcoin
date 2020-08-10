@@ -758,13 +758,15 @@ public:
     //! search for a given byte in the stream, and remain positioned on it
     void FindByte(uint8_t ch)
     {
+        size_t buf_offset = m_read_pos % vchBuf.size();
         while (true) {
             if (m_read_pos == nSrcPos)
                 Fill();
-            if (vchBuf[m_read_pos % vchBuf.size()] == std::byte{ch}) {
+            if (vchBuf[buf_offset] == std::byte{ch}) {
                 break;
             }
             m_read_pos++;
+            if (++buf_offset >= vchBuf.size()) buf_offset = 0;
         }
     }
 };
