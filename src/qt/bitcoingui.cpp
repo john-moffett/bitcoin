@@ -237,6 +237,8 @@ BitcoinGUI::~BitcoinGUI()
     if(trayIcon) // Hide tray icon, as deleting will let it linger until quit (on Ubuntu)
         trayIcon->hide();
 #ifdef Q_OS_MACOS
+    // Prevent unnecessary window focus notifications since we are shutting down
+    disconnect(qApp, &QApplication::focusWindowChanged, nullptr, nullptr);
     delete m_app_nap_inhibitor;
     delete appMenuBar;
     MacDockIconHandler::cleanup();
